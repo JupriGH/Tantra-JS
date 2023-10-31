@@ -8,11 +8,10 @@ const TMap = base => class extends base {
 	
 	constructor({id}) {
 		super({id})
-		this.info('TMAP init()', id)
 	}
 	
 	init_map() {
-		this.log('initializing MAP ...')
+		this.info('initializing MAP ...')
 	}
 }
 

@@ -1,5 +1,6 @@
 class CLog { 
 	tag = `[${this.constructor.name}]`
+
 	log	= (... args) => console.log(new Date().toLocaleTimeString('en-GB'), this.tag, ... args) // toLocaleString
 	info = (... args) => this.log('👉', ... args)
 	error = (... args) => this.log('❌', ... args)
