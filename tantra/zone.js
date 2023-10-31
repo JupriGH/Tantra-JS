@@ -3,6 +3,10 @@ class TZone {
 	
 	reboot() {
 	}
+	
+	/// Timers
+	async process_sec_timer() {
+	}
 
 }
 
