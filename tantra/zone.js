@@ -6,9 +6,13 @@ import { MIXIN } from './core.js'
 import { TServer } from './socket.js'
 import { TMap } from './map.js'
 
+import { CUser } from './user.js'
+
 //==================================================================
 class CZone extends MIXIN(TServer, TMap) {
 //==================================================================
+	static CLIENT = CUser
+	
 	zone_id = 0
 	port = 0
 	
