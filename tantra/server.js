@@ -1,14 +1,14 @@
 import assert from 'node:assert' 
 
-import { TZone } from './zone.js'
+import { CZone } from './zone.js'
 
 const ZONELIST = {}
 const TICKSIZE = 250
-const SECSTANDINGBY	= 8
+const SECSTANDINGBY = 8
 
 /// Timers
 export var 
-	CurrentTime = 0,
+	CurrentTime	= 0,
 	SecCounter 	= 0,
 	//RST_2		= 0,
 	//RST_4		= 0,
@@ -24,11 +24,11 @@ export var
 	//RST_256	= 0,
 	//DIV_256	= 0,
 	RST_512		= 0,
-	DIV_STANDBY = 0
+	DIV_STANDBY	= 0
 	
-///===========================================================
-/// Main
-///===========================================================
+/*===========================================================
+	Main
+===========================================================*/
 var zone_iter = []
 
 const process_timers = () => {
@@ -61,7 +61,7 @@ const process_timers = () => {
 
 const addZone = zone_id => {
 	assert (!(zone_id in ZONELIST), `Zone "${zone_id}" already exists!`)
-	return ZONELIST[zone_id] = new TZone({zone_id})
+	return ZONELIST[zone_id] = new CZone({zone_id})
 }
 
 const startServer = () => {
