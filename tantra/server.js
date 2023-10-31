@@ -61,7 +61,7 @@ const process_timers = () => {
 
 const addZone = zone_id => {
 	assert (!(zone_id in ZONELIST), `Zone "${zone_id}" already exists!`)
-	return ZONELIST[zone_id] = new CZone({zone_id})
+	return ZONELIST[zone_id] = new CZone({id:zone_id})
 }
 
 const startServer = () => {

@@ -13,7 +13,7 @@ class CZone extends MIXIN(TServer, TMap) {
 	port = 0
 	
 	constructor({id}) {
-		super()
+		super({id})
 		this.tag = `Z[${id}]` 
 		this.zone_id = id
 		this.port = BASEPORT + id
