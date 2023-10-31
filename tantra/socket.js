@@ -6,7 +6,7 @@ const INITCODE = 0x1f44f321
 //==================================================================
 const TSocket = base => class extends base { 
 //==================================================================
-	tag = `[TSocket]`
+	tag = `[${this.constructor.name}]`
 	socket = null
 	
 	constructor(socket, server) {
@@ -38,7 +38,7 @@ const TServer = base => class extends base {
 //==================================================================
 	static CLIENT = MIXIN(TSocket)
 	
-	tag = `[TServer]`
+	tag = `[${this.constructor.name}]`
 	socket = null
 	
 	constructor({id}) {
