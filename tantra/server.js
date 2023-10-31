@@ -1,5 +1,3 @@
-import assert from 'node:assert' 
-
 import { CZone } from './zone.js'
 
 const ZONELIST = {}
@@ -60,7 +58,7 @@ const process_timers = () => {
 }
 
 const addZone = zone_id => {
-	assert (!(zone_id in ZONELIST), `Zone "${zone_id}" already exists!`)
+	if (zone_id in ZONELIST) throw `Zone "${zone_id}" already exists!`
 	return ZONELIST[zone_id] = new CZone({id:zone_id})
 }
 
