@@ -20,6 +20,8 @@ class CZone extends MIXIN(TServer, TMap) {
 	}
 	
 	reboot() {
+		this.init_map()
+		return this.listen(this.port, SERVERHOST)
 	}
 	
 	/// Timers
