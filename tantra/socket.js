@@ -3,6 +3,7 @@ import { MIXIN } from './core.js'
 import { S_MSG_HEADER } from './base.js'
 
 const INITCODE = 0x1f44f321
+const HEADER_SIZE = 12
 
 //==================================================================
 const TClient = base => class extends base { 
@@ -72,10 +73,10 @@ const TClient = base => class extends base {
 		}
 		
 		while (1) {
-			if ((data.length - pos) < 12) break // to short ...
+			if ((data.length - pos) < HEADER_SIZE) break // to short ...
 			
 			var m_base = pos
-			var m_head = new S_MSG_HEADER(data.slice(pos, pos += 12))
+			var m_head = new S_MSG_HEADER(data.slice(pos, pos += HEADER_SIZE))
 			var m_pmsg = pos
 			var m_long = m_head.wPDULength	
 			
