@@ -20,7 +20,6 @@ class CZone extends MIXIN(TServer, TMap) {
 	}
 	
 	reboot() {
-		
 	}
 	
 	/// Timers

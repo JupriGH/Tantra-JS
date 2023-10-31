@@ -5,9 +5,9 @@ const INITCODE = 0x1f44f321
 //==================================================================
 const TServer = base => class extends base {
 //==================================================================
-	constructor(arg) {
-		super(arg)
-		this.info('TSERVER init()', arg)
+	constructor({id}) {
+		super({id})
+		this.info('TSERVER init()', id)
 	}
 }
 
