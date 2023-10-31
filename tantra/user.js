@@ -1,4 +1,4 @@
-import { MIXIN } from './core.js'
+import { MIXIN } from '../core/core.js'
 import { TClient } from './socket.js'
 
 //==================================================================

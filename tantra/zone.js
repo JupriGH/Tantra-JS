@@ -1,7 +1,6 @@
 /// Zone Server
-
+import { MIXIN } from '../core/core.js'
 import { DATAPATH, SERVERHOST, BASEPORT } from './config.js'
-import { MIXIN } from './core.js'
 
 import { TServer } from './socket.js'
 import { TMap } from './map.js'

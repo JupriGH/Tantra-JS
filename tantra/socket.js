@@ -1,5 +1,5 @@
 import net from 'node:net'
-import { MIXIN } from './core.js'
+import { MIXIN } from '../core/core.js'
 import { S_MSG_HEADER } from './base.js'
 
 const INITCODE = 0x1f44f321

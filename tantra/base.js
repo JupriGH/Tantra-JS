@@ -1,4 +1,4 @@
-import { BYTE, WORD, DWORD, SHORT, INT, STRING, INT64, __INT64, FLOAT, STRUCT } from './struct.js'
+import { BYTE, WORD, DWORD, SHORT, INT, STRING, INT64, __INT64, FLOAT, STRUCT } from '../core/struct.js'
 
 ///////////////////////////////////// MESSAGE HEADERS
 export const 
