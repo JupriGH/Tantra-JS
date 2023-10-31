@@ -42,15 +42,6 @@ const TClient = base => class extends base {
 	
 	// HANDLERS
 	
-	on_error() {
-		this.info('ERROR')
-	}
-	on_end() {
-		this.info('END')
-	}
-	on_close() {
-		this.info('CLOSE')
-	}
 	on_data = data => {
 		// add previous bytes
 		var tmp = this.recv_buf
@@ -97,9 +88,14 @@ const TClient = base => class extends base {
 		this.recv_buf = (data.length > pos) ? data.slice(pos) : null			
 	}
 
-	// OVERRIDES THIS
+	// IMPLEMENT THIS METHODS
+	
+	on_error() { this.info('ERROR') }
+	on_end() { this.info('END') }
+	on_close() { this.info('CLOSE') }
+	
 	process_message = (code, tick, len, head, msg) => {
-		this.log('recv:', tick, code.toString(16), len, 'bytes', head.__dump, "\r\n", msg)
+		this.log('recv:', tick, code.toString(16), len, 'bytes', head.__dump, ... (msg ? ["\r\n", msg] : ['<empty>']) )
 	}	
 	
 }
