@@ -94,9 +94,14 @@ const TClient = base => class extends base {
 		}
 		
 		// store remaining bytes
-		this.recv_buf = (data.length > pos) ? data.slice(pos) : null		
-		
+		this.recv_buf = (data.length > pos) ? data.slice(pos) : null			
 	}
+
+	// OVERRIDES THIS
+	process_message = (code, tick, len, head, msg) => {
+		this.log('recv:', tick, code.toString(16), len, 'bytes', head.__dump, "\r\n", msg)
+	}	
+	
 }
 //==================================================================
 const TServer = base => class extends base {

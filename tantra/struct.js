@@ -104,8 +104,12 @@ const STRUCT_PROXY = {
 					return c[_GET].call(__source__, c[_POS])
 				}
 			}
+		
+		} else if (name in target) {
+			return Reflect.get(...arguments)
+			
 		} else {
-			throw `STRUCT_PROXY.get(): invalid member => ${name}`
+			throw `STRUCT_PROXY.get(): invalid attribute => ${name}`
 		}
 
 		//console.log('### STRUCT_PROXY.get()', name, target)
@@ -132,7 +136,7 @@ const STRUCT_PROXY = {
 				}
 			}
 		} else {
-			throw `STRUCT_PROXY.set(): invalid member => ${name}`
+			throw `STRUCT_PROXY.set(): invalid attribute => ${name}`
 		}
 		return true
 	}
@@ -160,6 +164,28 @@ class STRUCT_BASE {
 			}
 		}
 		return prox
+	}
+	
+	get __dump() {
+		var { constructor } = this, { __item__ } = constructor
+		
+		return Object.fromEntries( Object.entries(__item__).map( e => {
+				var v = this[e[0]]
+				
+				if (v instanceof STRUCT_BASE)
+					e[1] = v.__dump
+				
+				//else if (is_array(v))
+				//	e[1] = v.map(o => is_struct(o) ? o.__dump : o)
+				
+				//else if (util.types.isTypedArray(v))
+				//	e[1] = Array.from(v)
+		
+				else
+					e[1] = v					
+				return e
+			})
+		)	
 	}
 }
 
