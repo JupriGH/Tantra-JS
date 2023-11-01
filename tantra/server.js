@@ -59,9 +59,9 @@ const process_timers = () => {
 
 const serverSecret = CZone.SECRET
 
-const addZone = zone_id => {
+const addZone = (zone_id, host, port) => {
 	if (zone_id in ZONELIST) throw `Zone "${zone_id}" already exists!`
-	return ZONELIST[zone_id] = new CZone({id:zone_id})
+	return ZONELIST[zone_id] = new CZone({id:zone_id, host, port})
 } 
 
 const startServer = () => {

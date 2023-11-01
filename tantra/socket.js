@@ -27,7 +27,6 @@ const TClient = base => class extends base {
 	constructor({socket, server}) {
 		super({socket, server})
 
-		// socket.setNoDelay()
 		socket.on('error', 	this.on_error.bind(this))
 		socket.on('end',	this.on_end.bind(this))
 		socket.on('close', 	this.on_close.bind(this))
@@ -37,18 +36,17 @@ const TClient = base => class extends base {
 	}
 	
 	// DECODE & ENCODE IN-PLACE
+	// data => header + payload
 	
-	decode_message(data) {
-		var kFlag 	= this.recv_sum & 1 // % 2
-		var	pos 	= this.recv_seq
+	decode_message(data) { 
+		var flag 	= this.recv_sum & 1 // % 2
+		var pos 	= this.recv_seq
 		var sum 	= 0
 		var u 		= data.length
 
-		for	(var i = 12; i < u; ++i) {
-
-			var trans = KEYWORDS[(pos++ & 0x3FF) << 1 | kFlag]		
+		for	(var i = HEADER_SIZE; i < u; ++i) {
+			var trans = KEYWORDS[(pos++ & 0x3FF) << 1 | flag]		
 			var mod = (i & 3)
-			
 				 if (mod === 0) data[i] -= (trans << 2) 
 			else if (mod === 1) data[i] += (trans >> 1)
 			else if (mod === 2) data[i] -= (trans << 1)
@@ -59,16 +57,11 @@ const TClient = base => class extends base {
 
 		// return packet, even check_sum not match
 		sum &= 0xFF
-		if	(sum !== data[3]) {
-			this.error('decode(): checksum mismatch =>', 
-				'seq:', this.recv_seq, 
-				'sum:', sum.toString(16), data[3].toString(16), 
-				data
-			)
-		}
+		if (sum !== data[3])
+			this.error('decode(): checksum mismatch =>', 'seq:', this.recv_seq, 'sum:', sum.hex(), data[3].hex(), data)
 
 		this.recv_sum = data[3]
-		this.recv_seq = (++ this.recv_seq) & 0xFF // 0xFF // BYTE		
+		this.recv_seq = (++ this.recv_seq) & 0xFF // BYTE		
 	}
 	encode_message(data) {
 	}
@@ -90,7 +83,7 @@ const TClient = base => class extends base {
 			if (code === INITCODE)
 				this.info('INITCODE: OK')		
 			else
-				this.error('INITCODE: ERROR')		
+				this.fatal('INITCODE: ERROR')		
 
 			this.init = true
 			pos += 4
@@ -102,19 +95,19 @@ const TClient = base => class extends base {
 			var m_base = pos
 			var m_head = new S_MSG_HEADER(data.slice(pos, pos += HEADER_SIZE))
 			var m_pmsg = pos
-			var m_long = m_head.wPDULength	
+			var m_size = m_head.wPDULength	
 			
-			if ((data.length - m_pmsg) < m_long) break // to short ...
+			if ((data.length - m_pmsg) < m_size) break // to short ...
 
-			pos += m_long
+			pos += m_size
 			
 			this.decode_message(data.slice(m_base, pos))
 
 			var code = m_head.wType			
 			var tick = m_head.dwClientTick			
-			var msg = m_long ? data.slice(m_pmsg, pos) : null
+			var msg = m_size ? data.slice(m_pmsg, pos) : null
 
-			this.process_message(code, tick, m_long, m_head, msg)
+			this.process_message(code, tick, m_size, m_head, msg)
 		}
 		
 		// store remaining bytes
@@ -127,8 +120,8 @@ const TClient = base => class extends base {
 	on_end() 	{ this.warn('END') }
 	on_close() 	{ this.warn('CLOSE') }
 	
-	process_message = (code, tick, len, head, msg) => {
-		this.debug('recv:', tick, code.toString(16), len, 'bytes', head.__dump, ... (msg ? ["\r\n", msg] : ['<empty>']) )
+	process_message = (code, tick, size, head, msg) => {
+		this.debug('recv:', tick, code.hex(), size, 'bytes', head.__dump, ... (msg ? ["\r\n", msg] : ['<empty>']) )
 	}	
 	
 }
@@ -158,8 +151,10 @@ const TServer = base => class extends base {
 	})
 	
 	on_connect = socket => {
+		socket.setNoDelay(true) // disable Nagle algorithm
+		
 		this.info('connection:', socket.remoteAddress, socket.remotePort)
-		var client = new this.constructor.CLIENT({socket, server:this})		
+		new this.constructor.CLIENT({socket, server:this})		
 	}
 }
 
