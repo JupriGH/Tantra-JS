@@ -1,14 +1,17 @@
 ### Data Folder Structure
+
 ```
 📁 data
 	📄HTSSetting.txl
 	📄Language.txt
 	📄TantraParam.tpa (server params)
-	📁 account
-	📁 guild
-	📁 client
+	📁account
+	📁guild
+	📁client
 		📄HTLauncher.exe
-	📁 zone
+		📁system
+			📄TantraParam.tpa (client params)
+	📁zone
 		📁1
 			📄GenerationArea.idx
 			📄MapData.tcm
