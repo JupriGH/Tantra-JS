@@ -13,18 +13,18 @@ This project aims to create a custom game server emulator for the popular MMORPG
 
 ### Required Files
 
-**Server Files :**
-- HTSSetting.txl
-- Language.txt
-- TantraParam.tpa
+- **Server Files :**
+	- HTSSetting.txl
+	- Language.txt
+	- TantraParam.tpa
 
-**Zone Files :**
+- **Zone Files :**
 
-- GenerationArea.idx
-- MapData.tcm
-- NPCGener.txt
-- Schedule.txt
-- Settings.ini
+	- GenerationArea.idx
+	- MapData.tcm
+	- NPCGener.txt
+	- Schedule.txt
+	- Settings.ini
 
 ### Documentation
 
