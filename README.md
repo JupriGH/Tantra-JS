@@ -10,4 +10,4 @@ This project aims to create a custom game server emulator for the popular MMORPG
 
 - HTLauncher v2.8.0.8
 
-![enter image description here](https://img.freepik.com/premium-vector/construction-sign-label_24886-506.jpg)
+![enter image description here](https://matasumbar.com/wp-content/uploads/2019/06/under-construction.png)
