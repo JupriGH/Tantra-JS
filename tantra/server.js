@@ -50,17 +50,19 @@ const process_timers = () => {
 	DIV_STANDBY = SecCounter % SECSTANDINGBY
 	
 	///
-	//. if (RST_512 === 0) RentalStore.check_rental_store() /// (512 / 4 / 60) = 2.1333333333333333 minute
+	/// if (RST_512 === 0) RentalStore.check_rental_store() /// (512 / 4 / 60) = 2.1333333333333333 minute
 		
 	//console.time('process_sec_timer')
 	return Promise.all(zone_iter.map(zone => zone.process_sec_timer()))
 	//console.timeEnd('process_sec_timer')	
 }
 
+const serverSecret = CZone.SECRET
+
 const addZone = zone_id => {
 	if (zone_id in ZONELIST) throw `Zone "${zone_id}" already exists!`
 	return ZONELIST[zone_id] = new CZone({id:zone_id})
-}
+} 
 
 const startServer = () => {
 	zone_iter.length = 0
@@ -72,4 +74,4 @@ const startServer = () => {
 	})
 }
 
-export { addZone, startServer }
+export { addZone, serverSecret, startServer }

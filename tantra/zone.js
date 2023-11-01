@@ -2,7 +2,7 @@
 import { MIXIN } from '../core/core.js'
 import { DATAPATH, SERVERHOST, BASEPORT } from './config.js'
 
-import { TServer } from './socket.js'
+import { TServer, KEYWORDS } from './socket.js'
 import { TMap } from './map.js'
 
 import { CUser } from './user.js'
@@ -11,6 +11,7 @@ import { CUser } from './user.js'
 class CZone extends MIXIN(TServer, TMap) {
 //==================================================================
 	static CLIENT = CUser
+	static serverSecret = secret => KEYWORDS.fill(0)
 	
 	zone_id = 0
 	port = 0

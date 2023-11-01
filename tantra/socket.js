@@ -4,10 +4,13 @@ import { S_MSG_HEADER } from './base.js'
 
 const INITCODE = 0x1f44f321
 const HEADER_SIZE = 12
+const KEYWORDS = Buffer.alloc(2048) // new Uint8Array(2048) // which is faster ? 
 
 //==================================================================
 const TClient = base => class extends base { 
 //==================================================================
+	static SECRET = KEYWORDS
+
 	tag 		= `[TClient]`
 	socket 		= null
 
@@ -36,6 +39,36 @@ const TClient = base => class extends base {
 	// DECODE & ENCODE IN-PLACE
 	
 	decode_message(data) {
+		var kFlag 	= this.recv_sum & 1 // % 2
+		var	pos 	= this.recv_seq
+		var sum 	= 0
+		var u 		= data.length
+
+		for	(var i = 12; i < u; ++i) {
+
+			var trans = KEYWORDS[(pos++ & 0x3FF) << 1 | kFlag]		
+			var mod = (i & 3)
+			
+				 if (mod === 0) data[i] -= (trans << 2) 
+			else if (mod === 1) data[i] += (trans >> 1)
+			else if (mod === 2) data[i] -= (trans << 1)
+			else if (mod === 3) data[i] += (trans >> 2)
+	
+			sum += data[i]
+		}
+
+		// return packet, even check_sum not match
+		sum &= 0xFF
+		if	(sum !== data[3]) {
+			this.error('decode(): checksum mismatch =>', 
+				'seq:', this.recv_seq, 
+				'sum:', sum.toString(16), data[3].toString(16), 
+				data
+			)
+		}
+
+		this.recv_sum = data[3]
+		this.recv_seq = (++ this.recv_seq) & 0xFF // 0xFF // BYTE		
 	}
 	encode_message(data) {
 	}
@@ -90,12 +123,12 @@ const TClient = base => class extends base {
 
 	// IMPLEMENT THIS METHODS
 	
-	on_error() { this.info('ERROR') }
-	on_end() { this.info('END') }
-	on_close() { this.info('CLOSE') }
+	on_error() 	{ this.error('ERROR') }
+	on_end() 	{ this.warn('END') }
+	on_close() 	{ this.warn('CLOSE') }
 	
 	process_message = (code, tick, len, head, msg) => {
-		this.log('recv:', tick, code.toString(16), len, 'bytes', head.__dump, ... (msg ? ["\r\n", msg] : ['<empty>']) )
+		this.debug('recv:', tick, code.toString(16), len, 'bytes', head.__dump, ... (msg ? ["\r\n", msg] : ['<empty>']) )
 	}	
 	
 }
@@ -103,6 +136,7 @@ const TClient = base => class extends base {
 const TServer = base => class extends base {
 //==================================================================
 	static CLIENT = MIXIN(TClient)
+	static SECRET = KEYWORDS
 	
 	tag = `[TServer]`
 	socket = null
@@ -129,4 +163,4 @@ const TServer = base => class extends base {
 	}
 }
 
-export { TServer, TClient }
+export { KEYWORDS, TServer, TClient }
